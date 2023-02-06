@@ -1,0 +1,2 @@
+<!-- 把公司现在的H5（Web） -->
+<web-view src='{{"https://item.m.jd.com/product/"+search}}'></web-view>

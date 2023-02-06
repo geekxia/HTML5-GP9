@@ -1,0 +1,10 @@
+{
+  "navigationBarTitleText": "团购首页",
+  "navigationBarBackgroundColor": "#096790",
+  "enablePullDownRefresh": true,
+  "navigationBarTextStyle": "white",
+  "usingComponents": {
+    "u-button": "../../uni_modules/vk-uview-ui/components/u-button/u-button",
+    "tab-bar": "../../components/TabBar"
+  }
+}

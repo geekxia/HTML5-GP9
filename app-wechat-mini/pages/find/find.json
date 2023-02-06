@@ -1,0 +1,10 @@
+{
+  "usingComponents": {
+    "qf-cate": "/components/cate/cate"
+  },
+  "navigationBarTitleText": "发现",
+  "navigationBarBackgroundColor": "#ffffff",
+  "navigationBarTextStyle": "black",
+  "onReachBottomDistance": 50,
+  "enablePullDownRefresh": true
+}

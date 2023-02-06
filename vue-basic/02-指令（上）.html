@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    [v-cloak] { display: none; }
+    .aa { color: red; }
+    .bb { color: blue; }
+    .cc { color: green; }
+    .f1 { font-size: 20px; }
+    .f2 { font-size: 30px; }
+    .f3 { font-size: 40px; }
+    .opt { opacity: 0.5; }
+    .hidden { display: none; }
+
+  </style>
+</head>
+<body>
+
+  <div id="app">
+
+    <!-- <h1>{{ msg }}</h1> -->
+    <!-- <h1 v-text='msg'></h1> -->
+    <h1 v-cloak>{{ msg }}</h1>
+    <h1 v-text='(year + 2)'></h1>
+    <h1 v-text='`${year+2}年`'></h1>
+    <h1 v-text='Math.random().toFixed(2)'></h1>
+    <h1 v-text='info.username'></h1>
+    <div v-html='content'></div>
+    <h1 v-text='foo' v-once></h1>
+
+    <div v-pre>
+      <h1 v-text='info.age'></h1>
+    </div>
+    <h1 v-bind:title='title'>千锋教育</h1>
+    <h1 :title='title'>中国千锋教育</h1>
+    <img :src='avatar' alt="我" />
+
+    <h1 :class='`${qc} f${qn} box`'>千锋教育</h1>
+    <h1 :class='[qc, `f${qn}`, Math.random() > 0.5 ? "box1" : "box2"]'>千锋教育</h1>
+    <h1 :class='{opt: bol1, hidden: bol2, [qc]: bol3}'>千锋教育</h1>
+    <hr>
+
+    <h1 :style='`color:${sc};fontSize:${sf}px;`'>深圳千锋</h1>
+    <h1 :style='[{color: sc, fontSize: `${sf}px`}, {opacity: 0.5}, {paddingTop: "20px"}]'>深圳千锋</h1>
+    <!-- 动态style语法，几乎都是对象写法 -->
+    <h1 :style='{color: sc, fontSize: `${sf}px`}'>深圳千锋</h1>
+    <h1 :style='{border:"1px solid red", [padWho]: `${padNum}px`}'>深圳千锋</h1>
+    <hr>
+
+    <input v-model='todo' type="text" @keyup.enter='confirm' />
+    <a href='https://baidu.com' @click.stop.prevent='submit'>点击</a>
+
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.7.10/dist/vue.js"></script>
+  <script>
+
+    // 一、文本类指令
+    // {{}} 文本插值，用于渲染文本类的声明式变量。有一个缺点，初始化时会出现“花括号一闪而过”的效果，怎么解决？使用v-text代替，或者使用v-cloak进行处理。
+    // v-cloak 用于解决文本插值的“{{}}一闪而过”的问题，配合 [v-cloak] { display:none; }
+    // v-text 用于渲染文本类的声明式变量。语法： <div v-text='表达式' />
+    // v-html 用于渲染HTML字符串，解析得到DOM结构；v-html默认已经实现了“XSS防注入攻击”。
+    // v-once 用于渲染文本类的声明式变量，配合其它的文本类指令一起使用，但只解析一次，也就是说当声明式变量发生变化时，视图不更新。语法：<div v-once />
+    // v-pre 用于调试。特点：凡是被v-pre所包裹的视图结构，不发生指令解析，阻止视图渲染。
+
+    // 二、动态属性
+    // v-bind 用于动态渲染HTML元素的属性们，比如动态的title、class、style、src、value。
+    // 提示：因为v-bind用得非常多，所以简写成 :
+    // 常用语法：v-bind:属性='表达式'  或者  :属性='表达式'
+    // 动态class语法：<div :class='`表达式`' />  <div :class='[表达式1, ...]' />   <div :class='{类名: 布尔值, ...}' />
+    // 动态style语法：<div :style='{css属性:css属性值}' />
+    // 注意：在同一个标签上，动态属性和静态属性，不要同时使用，这会导致代码难维护。
+
+    // 三、事件绑定
+    // v-on 用于给标签绑定事件，比如绑定click、keyup、input、mouseenter、touchstart等。
+    // 提示：因为v-on用得非常多，简写成 @
+    // 完整语法： v-on:事件名.事件修饰符='methods方法'   或   @事件名.事件修饰符='methods方法'
+    // 常用的事件修饰符：.enter/.shift/.alt/.space/.65  .stop/.prevent
+    // 其它知识点（后面再讲）：事件对象、事件传参
+
+
+    const app = new Vue({
+      el: '#app',
+      // 在vue中这里用于定义声明式变量，那么们经常用到的声明式变量的类型有哪些？（字符串、数值、布尔、数组、对象）
+      data: {
+        msg: 'Hello GP9',
+        year: 2022,
+        info: {
+          username: '张三',
+          age: 10
+        },
+        content: '<div><a href="https://baidu.com">百度</a></div>',
+        foo: '你好',
+        title: '千锋',
+        avatar: 'https://img30.360buyimg.com/img/s200x200_jfs/t29614/363/1619053092/197174/298b008f/5ce662fdNbb7850a9.jpg!cc_100x100.avif',
+        qc: 'aa',
+        qn: 1,
+        bol1: true,
+        bol2: false,
+        bol3: true,
+        sc: 'red',
+        sf: 30,
+        padWho: 'paddingTop',
+        padNum: 0,
+        todo: ''
+      },
+      methods: {
+        confirm () {
+          console.log('----添加', this.todo)
+          this.todo = ''
+        },
+        submit () {
+          console.log('----添加', this.todo)
+          this.todo = ''
+        }
+      }
+    })
+  </script>
+
+
+</body>
+</html>

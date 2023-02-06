@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    [v-cloak] { display: none; }
+  </style>
+</head>
+<body>
+
+  <div id="app">
+    <h1 v-cloak :title='price|rmb'>{{ price | rmb }}</h1>
+    <h1 v-cloak>{{ good_price | rmb}}</h1>
+    <h1 v-cloak>{{ student | stu }}</h1>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.7.10/dist/vue.js"></script>
+  <script>
+    // 1、什么过滤器？有什么用？
+    // 在Vue2中，过滤器是一种数据处理逻辑的封装。所以过滤器常用于数据处理。
+    // 过滤器通常用于那些“不起眼”的简单文本数据处理。如果复杂处理，建议使用计算属性，有助于性能优化。
+
+    // 2、过滤器（全局、局部）
+    // 定义全局过滤器  Vue.filter('过滤器名字', '数据处理函数')
+    // 定义局部过滤器 filters: {}
+
+    // 3、特别注意
+    // 过滤器只能用在 {{}} 和 v-bind中，其它指令中不能使用过滤器。
+    // 过滤器也可以链式调用，但有先后顺序的  <div>{{ name | f1 | f2 | f3 }}</div>
+
+    Vue.filter('rmb', (value) => {
+      // 复杂数据处理，do something
+      return `￥${Number(value).toFixed(2)}`
+    })
+
+    const app = new Vue({
+      el: '#app',
+      data () {
+        return {
+          price: '99.1',
+          good_price: '199',
+          student: '20221090889'
+        }
+      },
+      // 局部过滤器（用得很少）
+      filters: {
+        stu (value) {
+          // do something
+          return '深圳：'+value
+        }
+      }
+    })
+  </script>
+
+</body>
+</html>

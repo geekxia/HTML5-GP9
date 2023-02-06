@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    .chat { display: flex; }
+    .chat>div { flex: 1; border: 1px solid #ccc; padding: 20px; }
+  </style>
+</head>
+<body>
+
+  <div id="app">
+    <h1 ref='hello'>你好</h1>
+    <div ref='box'>早安</div>
+    <hr>
+    <qf-child-f ref='ff'></qf-child-f>
+    <hr>
+
+    <qf-child-g>
+      <template #header='{x}'>
+        <div v-if='x>100'>我是自定义的头部</div>
+      </template>
+      <template #default='{y}'>
+        <div>我是自定义的主体区域：<span v-text='y'></span></div>
+      </template>
+
+      <template #footer='{z}'>
+        <div :style='{color: z>100 ? "red": "black"}'>我是自定义的底部</div>
+      </template>
+    </qf-child-g>
+
+    <div class="chat">
+      <qf-child-m></qf-child-m>
+      <qf-child-n></qf-child-n>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.7.10/dist/vue.js"></script>
+
+  <script>
+
+    const bus = new Vue()  // 创建事件总线
+    // bus.$on/$emit/$once/$off
+    // bus.$on('频道', callback) 订阅消息频道
+    // bus.$emit('频道', '数据')  向指定频道发消息
+
+    Vue.component('qf-child-f', {
+      template: `
+      <div>
+        <h1>我是child-f组件：<span v-text='num'></span></h1>
+        <button @click='$root.add'>自增</button>
+        <button ref='btn'>自减</button>
+      </div>
+      `,
+      data () {
+        return { num: 1 }
+      },
+      mounted () {
+        console.log('---ff this', this)
+      }
+    })
+
+    Vue.component('qf-child-g', {
+      template: `
+      <div style='border:1px solid red;'>
+        <slot name='header' :x='a'>
+          <div>默认的头部</div>
+        </slot>
+        <slot :y='b'>默认的主体</slot>
+        <slot name='footer' :z='c'>
+          <div>默认的底部</div>
+        </slot>
+        <button @click='a+=50'>测试</button>
+      </div>
+      `,
+      data () {
+        return {
+          a: 100,
+          b: 200,
+          c: 300
+        }
+      },
+      mounted () {
+        console.log('---gg $slots', this.$slots)
+        console.log('---gg $scopedSlots', this.$scopedSlots)
+      }
+    })
+
+    Vue.component('qf-child-m', {
+      template: `
+      <div>
+        <input type="text" v-model='msg' />
+        <button @click='send'>发送</button>
+        <div v-html='content'></div>
+      </div>
+      `,
+      data () { return { msg: '', content: '' } },
+      methods: {
+        send () {
+          bus.$emit('nn', this.msg)
+          this.msg = ''
+        }
+      },
+      mounted () {
+        bus.$on('mm', message=>{
+          this.content += `<div>n同学说：${message}</div>`
+        })
+      }
+    })
+
+    Vue.component('qf-child-n', {
+      template: `
+      <div>
+        <input type="text" v-model='msg' />
+        <button @click='send'>发送</button>
+        <div v-html='content'></div>
+      </div>
+      `,
+      data () { return { msg: '', content: '' } },
+      methods: {
+        send () {
+          bus.$emit('mm', this.msg)
+          this.msg = ''
+        }
+      },
+      mounted () {
+        bus.$on('nn', (message)=>{
+          console.log('---我是n组件，收到了消息：', message)
+          this.content += `<div>m同学说：${message}</div>`
+        })
+      }
+    })
+
+    const app = new Vue({
+      el: '#app',
+      mounted () {
+        console.log('---$refs', this.$refs)
+        this.$refs.ff.$refs.btn.addEventListener('click', ()=>{
+          this.$refs.ff.num--
+        })
+      },
+      methods: {
+        add () {
+          this.$refs.ff.num++
+        }
+      },
+
+    })
+  </script>
+
+
+</body>
+</html>

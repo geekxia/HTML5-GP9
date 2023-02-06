@@ -1,0 +1,104 @@
+html, body {
+  padding: 0; margin: 0;
+  width: 100%; height: 100%;
+  overflow: hidden;
+}
+#app {
+  height: 100%; width: 100%;
+  overflow: hidden;
+  &>.qf-layout {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+}
+.qf-layout {
+  &>.ant-layout {
+    height: 100%;
+  }
+  .ant-layout-header {
+    overflow: hidden;
+    .anticon {
+      color: white; font-size: 16px;
+    }
+    .trigger {
+      margin-left: 25px;
+      cursor: pointer;
+    }
+    .handler > span {
+      margin-right: 15px;
+      cursor: pointer;
+    }
+    .on {
+      color: red;
+    }
+  }
+  .ant-menu-title-content {
+    &>a {
+      color: rgba(255, 255, 255, 0.65);
+    }
+  }
+
+  .ant-breadcrumb {
+    display: inline-block;
+    padding-left: 20px;
+
+    .ant-breadcrumb-link {
+      color: white;
+    }
+    .ant-breadcrumb-separator {
+      color: white;
+    }
+  }
+
+  .logo {
+    display: block;
+    img {
+      display: block;
+      width: 150px;
+      height: 60px;
+      margin: 20px auto;
+    }
+  }
+  .logo2 {
+    display: block;
+    img {
+      display: block;
+      width: 60px;
+      height: 60px;
+      margin: 20px auto;
+      border-radius: 50%;
+    }
+  }
+  .setting {
+    position: fixed;
+    right: 0;
+    top: 50%;
+    width: 50px;
+    height: 50px;
+    font-size: 18px;
+    text-align: center;
+    line-height: 50px;
+    color: white;
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+    cursor: pointer;
+  }
+  .ant-layout-content {
+    position: relative;
+    $p: 20px;
+    .main {
+      position: absolute;
+      top: $p;
+      left: $p;
+      right: $p;
+      bottom: $p;
+      overflow: scroll;
+      // min-width: 900px;
+    }
+    .main::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+}

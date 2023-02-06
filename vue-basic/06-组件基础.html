@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    .cate span { cursor: pointer; padding: 0 10px;}
+    .cate span.on { color: red; }
+  </style>
+</head>
+<body>
+
+  <div id="app">
+    <!-- 使用自定义组件，value自定义属性, input自定义事件 -->
+    <!-- <qf-cate :value='idx' @input='idx=$event'></qf-cate> -->
+
+    <!-- 对自定义组件来讲 v-model = :vlaue + @input -->
+    <qf-cate v-model='idx'></qf-cate>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.7.10/dist/vue.js"></script>
+
+  <script>
+  // 1、理解什么组件化？
+  // 在构建多页面应用时，有很多相似的视图结构，但没法实现复用。组件化可以解决这个问题（视图结构复用）。
+  // 在传统的web构建，使用div/span/nav/ul/table构建网站，开发周期长。组件化可以解决这个问题（快速建站）。
+  // 组件化的意义：封装复用，快速开发。
+  // 到底什么是组件？颗粒度更大的HTML扩展。你在使用这些组件时，就像你在使用HTML标签一样。
+
+  // 2、在Vue中如何封装组件？
+  // template选项，用于指定组件的视图结构
+  // props选项，用于接收父组件传递过来的自定义属性
+  // data(){}选项，用于定义组件自有的声明式变量
+  // methods选项，用于封装组件自有的函数或事件处理器
+  // this.$emit() 用于在组件中向父组件传递数据
+
+  // 3、父子组件通信
+  // 什么是通信？在应用程序中，主体之间的数据交互，就是通信。
+  // 父组件向子组件传递数据，使用自定义属性，在子组件中使用props选项来接收。
+  // 子组件向父组件传递数据，使用自定义事件，在子组件中使用this.$emit('自定义事件名','事件参数')触发。
+  // 提示：父子组件通信，是组件化开发中最基础的通信方案。
+  </script>
+
+  <script type='x-template' id='cate'>
+    <div class='cate'>
+      <span
+        v-for='item in cateArr'
+        v-text='item.label'
+        :class='{on:value==item.id}'
+        @click='$emit("input", item.id)'
+      />
+
+      <!--
+        <span :class='{on: value==2}' @click='$emit("input", 2)'>精华</span>
+        <span :class='{on: value==3}' @click='$emit("input", 3)'>分享</span>
+        <span :class='{on: value==4}' @click='$emit("input", 4)'>问答</span>
+        <span :class='{on: value==5}' @click='$emit("input", 5)'>招聘</span>
+      -->
+    </div>
+  </script>
+
+  <script>
+    // 封装组件所需要的原材料（Vue组件是基于选项）
+    const options = {
+      // 设计组件的视图结构（在视图结构可以使用任何指令）
+      template: '#cate',
+      // 用于接收自定义属性
+      // props: ['value'],  // 这种写法几乎不用
+      props: {
+        value: { type: Number, default: 1 }
+      },
+      // 组件自有的声明式数据
+      // 因为自定义组件会被复用，所以这里的data不能是简单的对象，要求是一个工厂函数。
+      // 这样可以保证，当组件被复用时，它们的data是完全相互独立的，彼此不干扰。
+      data () {
+        return {
+          cateArr: [
+            { id: 1, label: '全部' },
+            { id: 2, label: '精华' },
+            { id: 3, label: '问答' },
+            { id: 4, label: '招聘' },
+            { id: 5, label: '分享' }
+          ]
+        }
+      },
+      // 在Vue2中，自定义事件无须接收
+      methods: {
+        change (idx) {
+          // console.log('---clicked', idx)
+          // 问题：点击时已经知道idx了，怎么通知父组件呢？
+          // 触发自定义事件，并回传 idx数据给父组件。
+          // this.$emit('input', idx)
+        }
+      }
+    }
+
+    // 组件注册（第一个参数是组件名字，名称必须满足'qf-cate'，第二个参数是组件的原材料）
+    // 为什么组件名称必须用多个单词进行拼接？因为组件是HTML的扩展，避免Vue组件名和HTML标签名冲突。
+    Vue.component('qf-cate', options)  // 全局注册
+
+    // 根组件（最外层的那个Vue组件）
+    const app = new Vue({
+      el: '#app',
+      data () {
+        return {
+          idx: 1
+        }
+      },
+      watch: {
+        idx () {
+          console.log('----调接口')
+        }
+      },
+      methods: {
+        idxChange (ev) {
+          // console.log('---触发了', ev)
+          this.idx = ev
+        }
+      }
+    })
+  </script>
+</body>
+</html>

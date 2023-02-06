@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    .page span {
+      display: inline-block;
+      padding: 10px;
+      border: 1px solid #ccc;
+      cursor: pointer;
+    }
+    .page span.on {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="app">
+    <h1 v-text='total'></h1>
+    <h1 v-text='random'></h1>
+    <h1 v-text='count' @click='count++'></h1>
+    <hr>
+
+    <input type="text" v-model.number='total' />
+    <hr>
+
+    <div class="page">
+      <span><<</span>
+      <span v-if='page>3'>...</span>
+      <span v-for='p in pageArr' v-text='p' :class='{on: page===p}' @click='page=p'></span>
+      <span>...</span>
+      <span>>></span>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.7.10/dist/vue.js"></script>
+  <script>
+    // computed 计算属性
+    // 1、两个作用：
+      // 指令中的表达式比较复杂时，用计算属性把复杂表达式从视图中抽离出来，提升代码可维护性；
+      // 计算属性还具有缓存作用，是一种性能优化技巧。
+      
+    // 2、计算属性的特点：有且仅有当计算属性作用域内的声明式变量发生变化时，这个计算属性才会重新计算。
+    // 3、计算属性可以对哪些变量进行计算呢？一般对那些带有__ob__变量（声明式变量）进行计算。
+    // 4、计算属性默认只有getter功能，要想实现对计算属性的修改，我们得把计算属性拆成get/set的写法。
+    const app = new Vue({
+      el: '#app',
+      data: {
+        num: 1,
+        count: 100,
+        page: 1
+      },
+      computed: {
+        total: {
+          get () {
+            console.log('---计算了')
+            return this.num + 1 + 3 + 4 + 5
+          },
+          set (val) {
+            this.num = val - 1 - 3 - 4 - 5
+          }
+        },
+        random () {
+          return this.num * Math.random()
+        },
+        pageArr () {
+          const p = this.page
+          if (p<=3) return [1,2,3,4,5]
+          else return [p-2, p-1, p, p+1, p+2]
+        }
+      }
+    })
+  </script>
+
+</body>
+</html>

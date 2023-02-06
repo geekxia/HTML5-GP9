@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+
+  <div id="app">
+    <qf-button></qf-button>
+    <qf-button></qf-button>
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.7.10/dist/vue.js"></script>
+  <script>
+    // 1、什么混入？混入有什么用？
+    // 混入也叫Mixin，是一种基于选项的代码复用技巧。本质上，混入是对选项的复用。
+    // Vue所有组件都是由选项构建的，当多个组件有相同的选项时，我们可以把这些相同的选项抽离出来变成混入。
+    // 混入，通常用于混入相同的data和methods。
+
+    // 2、混入（全局、局部）
+    // 定义全局混入 Vue.mixin() 对所有Vue组件都起作用，所以用得少！
+    // 定义局部混入 mixins: [] 进行局部混入，只能当前组件起使用，所以用得多！
+
+    // 3、混入的优先级问题
+    // 组件自有选项 > 局部混入选项 > 全局混入选项
+
+    Vue.mixin({
+      // 当混入data时要用工厂函数
+      data () {
+        return {
+          version: 'vue2',
+          msg: '2022'
+        }
+      },
+      mounted () { console.log('---mounted') },
+      methods: {
+        change () {
+          this.version = 'vue3'
+        }
+      }
+    })
+
+    const opt = {
+      updated () {
+        console.log('---updated')
+      },
+      watch: {
+        version () {
+          console.log('---version changed')
+        }
+      },
+      data () {
+        return {
+          msg: '2023'
+        }
+      }
+    }
+
+    Vue.component('qf-button', {
+      template: `<div>我 {{version}} - {{msg}} <button @click='change'>改变</button></div>`,
+      // 局部混入（用得多，按需要进行混入）
+      mixins: [opt],
+      data () {
+        return { msg: '2024' }
+      },
+      mounted () {
+        console.log('---button mounted')
+      }
+    })
+
+    const app = new Vue({
+    })
+    app.$mount('#app')
+  </script>
+</body>
+</html>

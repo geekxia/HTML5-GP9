@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+
+  <div id="app">
+
+    <h1 v-text='list[0].user.age'></h1>
+    <button @click='update'>修改</button>
+    <hr>
+
+    <h1 v-text='num' ref='box'></h1>
+    <button @click='add'>自增</button>
+    <hr>
+
+    <div v-html='content'></div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.7.10/dist/vue.js"></script>
+  <script>
+
+    // 理解 MVVM
+    // Web开发： 网页 =  视图View + 数据Model   M+V是怎么组装起来？M+V在哪里组装？
+    // MVC  MVP  MVVM
+
+    // 1、$forceUpdate()
+    // Vue响应式缺陷：在复杂组件树关系中，当你set一个复杂的引用数据类型的声明式变量，但视图不更新。
+    // 当我们遇到响应式缺陷问题时，使用this.$forceUpdate()强调更新。
+
+    // 2、$nextTick() / Vue.nextTick()
+    // 当我们在执行声明式操作时，实际在Vue背后要生成新的Vnode、执行diff运算、生成更新队列、还要看浏览器的脸色去完成更新。所以，我们说声明式操作是异步的。当我们通过声明式操作改变视图时，立即取到最新的视图结果，但往往是取不到的，建议的方法是使用$nextTick()包起来。
+
+    const app = new Vue({
+      data () {
+        return {
+          msg: 'Hello API',
+          num: 1,
+          list: [
+            { id: 1, user: { age: 10 }}
+          ],
+          content: ''  // 后端返回的文章HTML字符串
+        }
+      },
+      methods: {
+        update () {
+          this.list[0].user.age++
+          // this.$forceUpdate() // 强调执行更新阶段
+          this.list = JSON.parse(JSON.stringify(this.list))
+        },
+        add () {
+          // 这个代码肯定是同步的，但是这个声明式操作是异步的。
+          this.num += 10  // 同步？异步？
+          Vue.nextTick(()=>{
+            console.log('---innerText', this.$refs.box.innerText)
+          })
+          // render()调用生成新Vnode，然后执行diff运算，生成一个更新队列, 看浏览器脸色去执行更新。
+        }
+      },
+      mounted () {
+        this.content = `<div><a id='a' href="https//baidu.com">百度</a></div>`
+        this.$nextTick(()=>{
+          document.getElementById('a').innerText = '千锋'
+        })
+      }
+    })
+    app.$mount('#app')
+  </script>
+
+</body>
+</html>

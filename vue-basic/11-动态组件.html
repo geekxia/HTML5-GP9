@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    .tabbar {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      height: 60px; line-height: 60px; display: flex;
+    }
+    .tabbar span {
+      flex: 1; border: 1px solid #ccc; text-align: center;
+      cursor: pointer;
+    }
+    .tabbar span.on { color: white; background: orange; }
+  </style>
+</head>
+<body>
+
+  <div id="app">
+
+    <keep-alive :include='["qf-home"]'>
+      <component :is='page'></component>
+    </keep-alive>
+
+    <!-- <qf-tabbar :value='page' @input='page=$event'></qf-tabbar> -->
+    <qf-tabbar v-model='page'></qf-tabbar>
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.7.10/dist/vue.js"></script>
+  <script>
+    // 1、动态组件 <keep-alive :include='[]' :exclude='[]'>
+    // 特点：凡是被<keep-alive>包裹的组件，不会“死”（不销毁），这样的话组件就多了两个生命周期钩子
+      // activated()  当组件激活（进入前台）时执行
+      // deactivated()  当组件休眠（进入后台）时执行
+    // 作用：对有性能要求的组件进行缓存。
+    // 正常组件是“创建”和“销毁”的切换，被动态组件包裹过的组件是“激活”和“休眠”的切换。
+
+    // 2、<component is='组件名'>
+    // 作用：根据is属性指定组件名，来加载对应的组件。
+
+    // 注册成全局组件
+    Vue.component('qf-tabbar', {
+      template: `
+      <div class='tabbar'>
+        <span
+          v-for='item in list'
+          v-text='item.text'
+          @click='$emit("input", item.value)'
+          :class='{on: value===item.value}'>
+        </span>
+      </div>
+      `,
+      data () {
+        return {
+          list: [
+            { id: 1, text: '首页', value: 'qf-home' },
+            { id: 2, text: '分类', value: 'qf-cate' },
+            { id: 3, text: '我的', value: 'qf-user' }
+          ]
+        }
+      },
+      props: {
+        value: { type: String, default: '' }
+      }
+    })
+
+    const homeOpt = {
+      template: `
+      <div>
+        首页：<input type="text" />
+      </div>
+      `,
+      destroyed () { console.log('---home destroyed') },
+      activated () { console.log('---home 激活了') },
+      deactivated () { console.log('---home 休眠了') },
+    }
+
+    const cateOpt = {
+      template: `
+      <div>
+        品类：<input type="text" />
+      </div>
+      `,
+      destroyed () { console.log('---cate destroyed') }
+    }
+
+    const userOpt = {
+      template: `
+      <div>
+        个人中心：<input type="text" />
+      </div>
+      `,
+      destroyed () { console.log('---user destroyed') }
+    }
+
+
+    const app = new Vue({
+      el: '#app',
+      // 注册成局部组件
+      components: {
+        'qf-home': homeOpt,
+        'qf-cate': cateOpt,
+        'qf-user': userOpt
+      },
+      data: {
+        page: 'qf-home'
+      }
+    })
+  </script>
+
+</body>
+</html>

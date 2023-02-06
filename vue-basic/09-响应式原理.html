@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+
+  <input id='ipt' type="text" />
+  <h1 id='h1'></h1>
+
+  <script>
+    // 一、若干概念
+    // 响应式：变量被访问或被修改时能够“监听”到，也就是给变量添加getter/setter钩子。当变量被访问时执行get钩子，当变量被修改时执行set钩子。（就好比，叫你一声，你会答应）
+    // “Touch”：从Vue角度来讲，指令第一次和声明式变量接触(getter)时，这个过程就称之为“Touch”，这会触发依赖收集。
+    // 依赖收集：当指令和声明式变量第一次“Touch”时，我们要给当前组件实例创建一个watcher实例，用于保存当前声明式变量所有的DOM更新方法。
+
+    const app = {}
+    const data = {
+      name: '张三',
+      age: 0
+    }
+    // 劫持（生命周期的第一阶段）  defineReactive
+    Object.keys(data).forEach(key=>{
+      Object.defineProperty(app, key, {
+        get () {
+          console.log(`有人访问了${key}`)
+          return data[key]
+        },
+        set (newVal) {
+          data[key] = newVal
+          console.log(`有人修改了${key}`)
+          watcher(key)  // notify通知更新（re-render）
+        }
+      })
+    })
+
+    // 依赖收集
+    const deps = {
+      name: [],
+      age: []
+    }
+
+    function watcher (key) {
+      deps[key].forEach(fn=>fn())
+    }
+
+    function render () {
+      // v-bind:value='name'
+      deps.name.push(
+        ()=>{
+          document.getElementById('ipt').value = app.name  // get name
+        }
+      )
+      // v-on:input='name=$event.target.value'
+      document.getElementById('ipt').addEventListener('input', ev=>{
+        app.name = ev.target.value // set name
+      })
+      // v-text='name'
+      deps.name.push(
+        ()=>{
+          document.getElementById('h1').innerText = app.name  // get
+        }
+      )
+      watcher('name')  // 依赖收集完成后的第一次更新
+    }
+
+    render()   // 初始化渲染
+  </script>
+
+</body>
+</html>

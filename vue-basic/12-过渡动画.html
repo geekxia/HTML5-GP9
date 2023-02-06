@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+
+  <link rel="stylesheet" href="./assets/animate.min.css" />
+
+  <style>
+    /* 定义一个名字叫 xxx 的进入动画 */
+    .xxx-enter { color: red; opacity: 0; }
+    .xxx-enter-active { transition: all ease .6s; }
+    .xxx-enter-to { color: black; opacity: 1; }
+
+    /* 定义一个名字叫 xxx 的离开动画 */
+    .xxx-leave { color: black; opacity: 1; }
+    .xxx-leave-active { transition: all ease .6s; }
+    .xxx-leave-to { color: red; opacity: 0; }
+  </style>
+</head>
+<body>
+
+  <div id="app">
+
+    <!-- 自已编写动画 -->
+    <transition name='xxx'>
+      <h1 v-show='bol1'>我是老师</h1>
+    </transition>
+    <button @click='bol1=!bol1'>显示/隐藏</button>
+    <hr>
+
+    <!-- 使用第三方的动画，比如animate.css -->
+    <transition
+      enter-active-class='animate__animated animate__fadeInDown'
+      leave-active-class='animate__animated animate__fadeOutLeft'
+    >
+      <h1 v-show='bol2'>我是学生</h1>
+    </transition>
+    <button @click='bol2=!bol2'>显示/隐藏</button>
+    <hr>
+
+    <!-- 当对两个以下的节点执行动画时，要给每个节点添加唯一的key，使用mode='out-in'指定先离开后进入。 -->
+    <transition
+      mode='out-in'
+      enter-active-class='animate__animated animate__fadeInDown'
+      leave-active-class='animate__animated animate__fadeOutLeft'
+    >
+      <h1 v-if='row===0' key='1'>第一行文字</h1>
+      <h1 v-else-if='row===1' key='2'>第二行文字</h1>
+      <h1 v-else key='3'>第三行文字</h1>
+    </transition>
+    <button @click='row=(row+1)%3'>切换</button>
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.7.10/dist/vue.js"></script>
+  <script>
+    // 1、过渡动画 <transition>
+      // 注意：进入动画的终点样式不会保留的，最终元素的样式取决浏览器或用户。
+
+    const app = new Vue({
+      el: '#app',
+      data: {
+        bol1: true,
+        bol2: true,
+        row: 0
+      }
+    })
+  </script>
+</body>
+</html>

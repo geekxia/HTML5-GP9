@@ -1,0 +1,71 @@
+.layer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: rgba(0,0,0,.6);
+}
+.dialog {
+  width: 520px;
+  position: absolute;
+  top: 130px;
+  left: 50%;
+  margin-left: -260px;
+  background-color: white;
+  border-radius: 3px;
+}
+
+.dialog header {
+  height: 60px;
+  box-sizing: border-box;
+  line-height: 60px;
+  padding: 0 20px;
+  font-size: 14px;
+  overflow: hidden;
+  position: relative;
+}
+.dialog header div:last-child {
+  position: absolute;
+  top: 23px;
+  right: 20px;
+  font-size: 14px;
+  line-height: 14px;
+}
+
+
+.dialog main {
+  padding: 20px;
+  box-sizing: border-box;
+  font-size: 14px;
+}
+
+.dialog footer {
+  height: 60px;
+  box-sizing: border-box;
+  padding: 0 20px;
+  padding-top: 15px;
+  display: flex;
+  justify-content: flex-end;
+}
+.dialog footer>span {
+  font-size: 12px;
+  cursor: pointer;
+  height: 30px;
+  padding: 0 15px;
+  line-height: 30px;
+  border: 1px solid #ccc;
+  border-radius: 2px;
+  display: inline-block;
+  margin: 0 10px;
+}
+.dialog footer>span.primary {
+  background-color: blue;
+  color: white;  
+  border-color: blue;
+}
+.dialog footer>span.danger {
+  background-color: red;
+  color: white;
+  border-color: red;
+}

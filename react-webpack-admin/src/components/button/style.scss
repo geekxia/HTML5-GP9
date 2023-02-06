@@ -1,0 +1,22 @@
+.qf-button {
+  display: inline-block;
+  height: 30px;
+  line-height: 28px;
+  padding: 0 15px;
+  border: 1px solid #eee;
+  box-sizing: border-box;
+  font-size: 12px;
+  cursor: pointer;
+  border-radius: 2px;
+  margin: 0 10px;
+}
+.qf-button.primary {
+  background-color: blue;
+  color: white;
+  border-color: blue;
+}
+.qf-button.danger {
+  background-color: red;
+  color: white;
+  border-color: red;
+}

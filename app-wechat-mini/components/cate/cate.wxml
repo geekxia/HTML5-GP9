@@ -1,0 +1,5 @@
+<picker bindchange="change" value="{{value}}" range="{{list}}" range-key='cate_zh'>
+    <view class="picker">
+      {{ list[value].cate_zh }}
+    </view>
+  </picker>

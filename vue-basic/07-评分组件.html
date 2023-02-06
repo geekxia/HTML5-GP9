@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    .rate {
+      display: flex;
+      align-items: center;
+      padding: 10px;
+    }
+    .rate span {
+      display: inline-block; width: 30px; height: 30px; margin: 0 2px;
+      background: url('./assets/rate.png') center center / 30px 30px;
+      cursor: pointer;
+    }
+    .rate span.on {
+      background-image: url('./assets/rate-on.png');
+    }
+    .tip { display: inline-block; }
+  </style>
+</head>
+<body>
+
+  <div id="app">
+
+    <!-- <qf-rate :value='service' @input='service=$event'></qf-rate> -->
+    <qf-rate v-model='service'>服务态度：</qf-rate>
+    <qf-rate v-model='speed'>配送速度：</qf-rate>
+    <qf-rate v-model='product'>产品体验：</qf-rate>
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.7.10/dist/vue.js"></script>
+
+  <script type='x-template' id='rate'>
+    <div class='rate'>
+      <slot></slot>
+      <span v-for='i in 5' :class='{on: value>=i}' @click='$emit("input", i)'></span>
+      <div class='tip' v-text='tip'></div>
+    </div>
+  </script>
+
+  <script>
+    // 注册组件
+    Vue.component('qf-rate', {
+      template: '#rate',
+      props: {
+        value: { type: Number, default: 0 }
+      },
+      computed: {
+        tip () {
+          const tips = ['', '极差', '失望', '一般', '满意', '惊喜']
+          return tips[this.value] || ''
+        }
+      }
+    })
+  </script>
+
+  <script>
+    const app = new Vue({
+      el: '#app',
+      data: {
+        service: 0,
+        speed: 0,
+        product: 0
+      },
+      // 如果你要调接口,在这里调接口
+      mounted () {}
+    })
+  </script>
+
+</body>
+</html>

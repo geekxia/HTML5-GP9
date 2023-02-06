@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+
+  <div id='app'>
+    <h1 v-text='num'></h1>
+    <button @click='add'>自增</button>
+    <hr>
+
+    <h1 v-text='info.user.child.age'></h1>
+    <button @click='add2'>长大</button>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.7.10/dist/vue.js"></script>
+  <script>
+    // watch 监听器（侦听器）
+    // 一个作用：用于监听__ob__变量（声明式变量）的变化，然后去做另外一件事。
+    // 监听可以监听哪些声明式变量的变化？data声明式变量、computed计算属性、$route路由信息、$store状态管理。
+    // 注意：监听器监听的是“变化”，也就是说，当被监听的变量没有变化时，监听器函数不执行。
+    // 问题：watch在监听引用数据类型的声明式变量时，为什么只监听第一层？（出于性能优化的考虑）
+
+    const app = new Vue({
+      el: '#app',
+      data: {
+        num: 1,
+        info: {
+          user: {
+            name: '张三',
+            age: 30,
+            child: {
+              name: '小张三',
+              age: 3
+            }
+          }
+        }
+      },
+      computed: {
+        total () {
+          return this.num * 0
+        }
+      },
+      watch: {
+        // 语法：要监听“谁”，函数名（key名）就是“谁”。
+        num (newVal, oldVal) {
+          // console.log('newVal', newVal, this.num)
+          // console.log('oldVal', oldVal)
+        },
+        // 监听计算属性
+        total () {
+          console.log('---total重新计算了', this.total)
+        },
+
+        // 监听器监听一个引用类型的声明式变量时，默认只能监听到第一层。
+        // info () {
+        //   console.log('info变化了')
+        // },
+
+        // 如果希望监听引用数据类型的深层次变化，使用deep:true进行深度监听。
+        // 这种深度监听，相当于给引用数据类型的每一层都添加了set/get钩子，是一种性能损耗。
+        info: {
+          handler () {
+            console.log('info变化了')
+          },
+          deep: true
+        },
+
+        // 推荐：当我们监听引用数据类型的声明式变量时，最佳写法是这样的。
+        'info.user.child.age' () {
+          console.log('---info中的age变了')
+        },
+
+        // 监听器方法是一个methods方法
+        // 当child变化时，执行一个名字叫childChangeHandler的methods方法
+        'info.user.child': 'childChangeHandler'
+      },
+      methods: {
+        add () {
+          this.num++
+        },
+        add2 () {
+          // this.info.user.child.age++
+          // this.info.user.child.name = '小李四'
+          this.info.user.child = { age: 15 }
+          // this.info = { user: { child: { age: 10 }}}
+        },
+        childChangeHandler () {
+          console.log('---info中的child变了')
+        }
+      }
+    })
+  </script>
+
+
+</body>
+</html>

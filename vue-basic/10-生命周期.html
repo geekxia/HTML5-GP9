@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+
+  <div id="app">
+    <h1 v-for='i in num' v-text='i'></h1>
+    <button @click='add'>自增</button>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.7.10/dist/vue.js"></script>
+  <script>
+    // 生命周期：create创建阶段、mount挂载阶段、update更新阶段、destroy销毁阶段
+    // 生命周期钩子：11个（四个阶段8个钩子、activated、deactivated、errorCaptured）
+
+    const app = new Vue({
+      data: {
+        num: 1
+      },
+      methods: {
+        add () {
+          this.num++
+        }
+      },
+      // 声明生命周期钩子函数
+      // 声明methods方法
+      beforeCreate () {
+        console.log('---beforeCreate')
+      },
+      // 接收并注入Vue组件树中的inject数据
+      // 响应式劫持：遍历data选项添加get/set，并把这些声明式变量放在this上
+      created () {
+        console.log('---created')
+        // 有些公司，喜欢在这里接口！也可以的。
+      },
+      // 根据el选项或$mount寻找template模板（带有指令和声明式变量的视图字段串）
+      // 把template编译成 render函数（这个函数调用时可以生成Vnode）
+      beforeMount () {
+        console.log('---beforeMount')
+      },
+      // 调用render函数第一次生成Vnode（Vnode是一种JSON格式的数据，用于描述真实的DOM，保存在内存中）
+      // render函数调用，指令和上下文中的声明式数据“Touch”，这会触发get，进一步创建Watcher实例，执行依赖收集
+      // 依赖收集完成后，执行Watcher初始化DOM渲染
+      mounted () {
+        console.log('---mounted')
+        // 调接口、开定时器、实例化一个插件、订阅长连接、DOM操作。。
+      },
+      // 页面渲染完成，用户可以看到一个完整的页面
+      // 当交互事件发生并set了声明式变量时（当data变化时）
+      beforeUpdate () {
+        console.log('---beforeUpdate')
+      },
+      // 再次调用render函数，生成一个全新的Vnode（此时有两个Vnode）
+      // 调用patch(newVnode, oldVnode)，执行diff运算（循环递归）找出最小化的“脏节点”
+      // 执行更新队列更新视图（异步的过程）
+      updated () {
+        console.log('---updated')
+        // 相当于watch的功能，因为watch很好用，所以这个生命周期几乎不用。
+      },
+      // 当路由切换或者调用$destroy()时
+      beforeDestroy () {
+        console.log('---beforeDestroy')
+        // 清缓存、清除定时器、关闭长连接。。。
+      },
+      // 拆卸掉watcher实例（组件将不再更新）
+      // 销毁子组件们
+      // 移除事件监听器（比如watch）
+      destroyed () {
+        console.log('---destroyed')
+      }
+    })
+
+    app.$mount('#app')
+  </script>
+
+</body>
+</html>

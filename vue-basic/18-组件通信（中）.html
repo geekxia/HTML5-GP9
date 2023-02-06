@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    .lang span { cursor: pointer; }
+    .lang span.on { color: red; }
+  </style>
+</head>
+<body>
+
+  <div id='app'>
+    <!-- <qf-child-d v-model='lang'></qf-child-d> -->
+    <qf-child-d :value='lang' @input='lang=$event'></qf-child-d>
+    <hr>
+
+    <qf-child-e></qf-child-e>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.7.10/dist/vue.js"></script>
+  <script>
+    Vue.component('qf-child-d', {
+      template: `
+      <div class='lang' @click='change'>
+        <span :class='{on: $attrs.value === "zh"}' data-lang='zh'>中文</span>
+        <span :class='{on: $attrs.value === "fr"}' data-lang='fr'>法语</span>
+        <span :class='{on: $attrs.value === "ge"}' data-lang='ge'>德语</span>
+      </div>
+      `,
+      mounted () {
+        console.log('---$attrs', this.$attrs) // 访问自定义属性
+        console.log('---$listeners', this.$listeners) // 访问自定义属性
+      },
+      methods: {
+        change (ev) {
+          const lang = ev.target.dataset.lang
+          this.$listeners.input(lang)
+        }
+      }
+    })
+
+    Vue.component('qf-child-e', {
+      template: `
+      <div>
+        <h1>我是child-e组件：<span v-text='$parent.num'></span></h1>
+        <button @click='$parent.add'>自增</button>
+      </div>
+      `,
+      mounted () {
+        console.log('---$parent', this.$parent)
+        console.log('---$children', this.$children)
+      }
+    })
+
+    const app = new Vue({
+      el: '#app',
+      data: {
+        lang: 'zh',
+        num: 1
+      },
+      methods: {
+        add () {
+          this.num++
+        }
+      }
+    })
+  </script>
+
+</body>
+</html>

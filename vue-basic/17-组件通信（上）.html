@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+
+  <div id="app">
+    <qf-child-a v-model='num'></qf-child-a>
+    <hr>
+    <qf-child-b :num='num'></qf-child-b>
+    <hr>
+    <qf-child-c></qf-child-c>
+    <hr>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.7.10/dist/vue.js"></script>
+  <script>
+    // 组件树关系：父子组件、兄弟组件、后代组件。
+
+    // 1、父子组件通信：父传子使用自定义属性(props)，子传父使用自定义事件($emit)。这种通信是组件化开发中最基础的也是最重要的通信方案。
+    // 2、状态提升：当两个或多个兄弟组件之间需要通信时，我们的做法是把这个需要共享的声明式变量定义在它们共同的最近的父组件中去。
+    // 3、provide/inject通信：这是一种基于组件树关系（后代组件）的通信，在某个组件中使用provide提供数据，在这个组件的后代组件中使用inject注入数据。这种数据流，只能自上而下，也就是说在后代组件中无法修改父级组件提供的provide数据；这种数据流，不具有响应式，也就是说父级组件中的provide发生变化了，后代组件不会自动更新。
+
+    // 4、$attrs/$listener通信：在子组件中使用$attrs来接收自定义属性们（除了class和style外），在子组件中使用$listeners接收自定义事件。在某种程度上来讲，它是props/$emit()的替代方案，一般不推荐使用。
+    // 5、$parent/$children通信：通过这两个内置API，可以做到在指定组件中访问到任意其它组件实例对象。使用这种玩法，可以肆意地在组件树中穿梭，进而访问其它组件的属性，还可以调用它的方法。
+
+    // 6、ref通信：ref是vue内置的属性。当ref作用在普通的HTML标签上，访问的是DOM对象。当ref作用在组件上时，访问是组件实例对象。在Vue开发中，尽可能地避免使用ref。每个组件实例都有一个内置的$refs，代表着当前作用域下的DOM们和自定义组件实例们。
+    // 7、插槽通信：子组件通过<slot x y>传递数据给父组件，在父组件中使用 v-slot='scoped'来接收；在子组件中使用$slots/$scopedSlots来接收插槽内容。（$slots/$scopedSlots坑）
+
+    // 8、事件总线：在Vue开中，我们使用const bus = new Vue()创建事件总线，使用bus.$emit()发布消息，使用bus.$on()订阅消息。这是一种基于“订阅-发布”模式的通信方案，也是一种基于事件监听的“一对多”的通信方案，与组件树的层级无关的通信方案。
+
+    // 9、状态管理：这是一种基于Vuex实现的通信方案。后面再讲！
+
+    Vue.component('qf-child-a', {
+      template: `
+      <div>
+        <h1>我是child-a组件：<span v-text='value'></span></h1>
+        <button @click='$emit("input", value+1)'>自增</button>
+      </div>
+      `,
+      props: {
+        value: { type: Number, default: 0 }
+      }
+    })
+
+    Vue.component('qf-child-b', {
+      template: `
+      <div>
+        <h1>我是child-b组件：<span v-text='num'></span></h1>
+      </div>
+      `,
+      props: {
+        num: { type: Number, default: 0 }
+      }
+    })
+
+    Vue.component('qf-child-c', {
+      template: `
+      <div>
+        <h1>我是child-c组件：<span v-text='version'></span></h1>
+      </div>
+      `,
+      // 从组件树中注入数据
+      inject: ['version']
+    })
+
+    const app = new Vue({
+      el: '#app',
+      data () {
+        return { num: 1, vue: 2 }
+      },
+      // 向组件树提供数据
+      // provide: {
+      //   version: 'vue3'
+      // },
+      provide () {
+        // do something
+        return {
+          version: `vue${this.vue}`
+        }
+      }
+    })
+  </script>
+
+</body>
+</html>

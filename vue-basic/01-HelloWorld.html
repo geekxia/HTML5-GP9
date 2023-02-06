@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+
+  <div id='app'>
+    <h1 v-text='num'></h1>
+    <button v-on:click='add'>自增</button>
+    <hr>
+    <h1 v-bind:style='{color: c}'>Hello World</h1>
+    <button v-on:click='change'>改变颜色</button>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.7.10/dist/vue.js"></script>
+  <script>
+    // 1、Vue特点：MVVM框架、渐近式框架、基于选项的、声明式的、基于组件化的、有丰富的指令。
+    // 2、JQ开发思想：当我们希望视图发生改变时，使用DOM选择器直接选中DOM，然后对DOM直接做操作。
+    // 3、Vue开发思想：当我们希望改变视图时，我们得先声明一个合适的声明式变量，再通过指令与DOM关联起来，当我们操作这个声明式变量时，视图会自动更新，这是一种间接的DOM更新，即响应式。
+
+    // console.log('Vue', Vue)
+
+    // 创建一个Vue响应式系统（Vue地盘）
+    const app = new Vue({
+      // 用于挂载Vue响应式系统
+      el: '#app',
+      // 用于定义声明式变量（当声明式变量发生变化时，它所对应的视图结构自动更新）
+      data: {
+        num: 1,
+        c: 'black'
+      },
+      // 用于定义函数的（工具方法、事件处理器）
+      methods: {
+        add () {
+          this.num++
+        },
+        change () {
+          this.c = 'blue'
+        }
+      }
+    })
+    console.log('---app', app)
+  </script>
+
+
+</body>
+</html>

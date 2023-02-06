@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+
+  <div id="app">
+    <qf-button v-color @click='add'></qf-button>
+    <h1>{{ "99" | rmb }}</h1>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.7.10/dist/vue.js"></script>
+  <script>
+    // 1、什么是Vue插件？怎么理解Vue插件？
+    // 在Vue生态中，除了Vue本身以外，所有其它第三方库（轮子）都是以插件的方式与Vue结合的。
+    // 了解Vue插件开发有两个目的：帮助大家学会使用第三方Vue插件，自己独立开发开源的Vue插件。
+
+    // 2、如何封装Vue插件？
+    // const QfPlugin = function (Vue) { ... }
+    // const QfPlugin = { install (Vue) { ... } }
+
+    // 3、如何使用Vue插件（第三方插件，自已写的插件）？
+    // Vue.use(QfPlugin) 实际上在调用插件函数或者插件的install()方法。
+    // 插件注册都是全局的，没有局部的注册方式。
+
+    // 4、Vue开发经验
+    // Vue开发，实际上就是在使用各种各样的插件实现需求。
+    // 怎么积累Vue开发经验呢？平时多看优秀的开源代码或者企业级代码，把优秀的可复用的东西拷贝过来，变成你的插件。
+
+    // 定义Vue插件的基本套路
+    const QfPlugin = function (Vue) {
+      // 注册全局组件
+      Vue.component('qf-button', { template: `<div @click='$emit("click")'>我的按钮</div>`} )
+      // 定义全局指令
+      Vue.directive('color', function(){})
+      // 全局混入
+      Vue.mixin({ methods: { add () { console.log('---add') }} })
+      // 全局过滤器
+      Vue.filter('rmb', val=>(`￥${Number(val).toFixed(2)}`))
+      // 在Vue原型链上添加属性或方法
+      Vue.prototype.$version = 'vue2'
+      Vue.prototype.$ajax = function () { console.log('---ajax') }
+      // 还可以对另一个插件进行注册
+      Vue.use(function(Vue){})
+    }
+
+    // 使用第三方插件或自己编写的插件
+    Vue.use(QfPlugin)
+
+    const app = new Vue({
+      el: '#app',
+      mounted () {
+        console.log('this', this)
+      }
+    })
+  </script>
+
+</body>
+</html>

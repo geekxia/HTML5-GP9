@@ -1,0 +1,40 @@
+{
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+			"path": "pages/index/index",
+			"style": {
+				"navigationBarTitleText": "团购首页",
+				"navigationBarBackgroundColor": "#096790",
+				"enablePullDownRefresh": true,
+				"navigationBarTextStyle": "white"
+			}
+		}
+		// #ifdef APP-PLUS
+		,
+		{
+			"path": "pages/find/index",
+			"style": {
+				"navigationBarTitleText": "混合页面",
+				"navigationBarBackgroundColor": "#096790",
+				"enablePullDownRefresh": true,
+				"navigationBarTextStyle": "white"
+			}
+		}
+		// #endif
+		
+	],
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "千锋团购",
+		"navigationBarBackgroundColor": "#F8F8F8",
+		"backgroundColor": "#F8F8F8"
+	}
+	// #ifdef MP-WEIXIN
+	,
+	"permission": {
+	    "scope.userLocation": {
+	      "desc": "你的位置信息将用于小程序位置接口的效果展示"
+	    }
+	}
+	// #endif
+}

@@ -1,0 +1,11 @@
+<!--页面中只能使用小程序内置组件-->
+<view class="container">
+  <view class="box">Hello World</view>
+</view>
+
+<view class="num">{{ num }}</view>
+<button bindtap="add">自增</button>
+
+<view class="hello">
+  千锋欢迎你
+</view>

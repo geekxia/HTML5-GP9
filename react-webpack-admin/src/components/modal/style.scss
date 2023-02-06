@@ -1,0 +1,55 @@
+.layer {
+  position: fixed;
+  top: 0; bottom: 0;
+  right: 0; left: 0;
+  background-color: rgba(0,0,0,.6);
+  .wrap {
+    position: absolute;
+    top: 100px;
+    left: 50%;
+    margin-left: -260px;
+    width: 520px;
+    background-color: white;
+    border-radius: 3px;
+    font-size: 14px;
+    header {
+      line-height: 60px;
+      padding: 0 20px;
+      border-bottom: 1px solid #eee;
+      overflow: hidden;
+      height: 61px;
+      &>div:first-child {
+        float: left;
+      }
+      &>div:last-child {
+        float: right;
+        cursor: pointer;
+      }
+    }
+    footer {
+      height: 60px;
+      padding: 0 20px;
+      border-top: 1px solid #eee;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+    }
+    main {
+      padding: 20px;
+    }
+  }
+
+  // JS弹框的样式
+  .tip {
+    width: 400px;
+    position: absolute;
+    top: 100px;
+    left: 50%;
+    margin-left: -200px;
+    border-radius: 3px;
+    background-color: white;
+    height: 200px;
+    box-sizing: border-box;
+    padding: 20px;
+  }
+}

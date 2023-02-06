@@ -1,0 +1,15 @@
+/**局部样式**/
+.box {
+  color: red;
+}
+
+.hello {
+  /* 使用rpx作为css尺寸单位 */
+  font-size: 150rpx; 
+  color: red;
+}
+
+.num {
+  font-size: 60rpx;
+  text-align: center;
+}

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+
+  <div id="app">
+    <!-- <h1 v-color='"red"'>你好</h1> -->
+    <h1 v-color='color'>你好</h1>
+    <hr>
+
+    姓名：<input type="text" v-form.trim.lazy='name' /><hr>
+    年龄：<input type="text" v-form.number='age'>
+    <!-- <h1 v-text='name'></h1> -->
+    <!-- <input type="text" v-from='age'> -->
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.7.10/dist/vue.js"></script>
+  <script>
+    // 1、什么是指令？怎么理解指令？
+    // 什么是指令？每一个指令都一种特定的DOM操作类型。指令的本质就是DOM功能的一种封装。
+    // 什么是自定义指令？使用Vue.directive()封装可复用的DOM功能，这就是自定义指令。
+
+    // 2、自定义指令（全局、局部）
+    // 定义全局指令 Vue.directive('指令名字', fn | {})
+    // 定义局部指令 directives: { }
+
+    // 3、作业
+    // 把vue官方所有的指令，全部试着自己封装一遍
+    // 从这8个指令中选择两三个封装一下：https://segmentfault.com/a/1190000038475001
+
+    Vue.directive('form', {
+      bind (el, binding, vnode) {
+        // el 就是指令作用在的那个DOM节点
+        console.log('---binding', binding)
+        console.log('---vnode', vnode)
+
+        const { trim, lazy, number } = binding.modifiers
+
+        el.value = binding.value  // v-bind
+        el.addEventListener(lazy?'blur':'input', function(ev) {
+          // 在事件处理器中，修改声明式变量
+          // binding.value = ev.target.value
+          let newVal = ev.target.value
+          if (trim) newVal = newVal.trim()
+          if (number) newVal = Number(newVal)
+          // 对上下文进行操作
+          vnode.context[binding.expression] = newVal
+        })
+      },
+      update (el, binding) {
+        // el.value = binding.value  // v-bind
+      }
+    })
+
+    const app = new Vue({
+      el: '#app',
+      data () {
+        return {
+          color: 'red',
+          name: '',
+          age: 0
+        }
+      },
+      // 局部指令（只能在当前组件中使用，很少使用局部指令）
+      directives: {
+
+        // 'color': {
+        //   bind (el, binding, vnode) {
+        //     console.log('---el', el)
+        //     console.log('---binding', binding)
+        //     console.log('---vnode', vnode)
+        //     el.style.color = binding.value
+        //   },
+        //   update (el, binding, vnode) {
+        //     console.log('---更新了')
+        //     el.style.color = binding.value
+        //   },
+        //   // inserted() / componentUpdated() / unbind()
+        // },
+
+        // fn = { bind, update }
+        'color': function (el, binding, vnode) {
+          el.style.color = binding.value
+        }
+      }
+    })
+
+  </script>
+
+</body>
+</html>

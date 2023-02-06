@@ -1,0 +1,14 @@
+.submit {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background-color: white;
+  z-index: 9999;
+  box-shadow: 5px 2px 20px #ccc;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding-right: 20px;
+}

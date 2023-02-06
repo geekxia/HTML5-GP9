@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title><%= htmlWebpackPlugin.options.title %></title>
+  <!-- 引入antd的css样式，绕过webpack编译 -->
+  <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/antd@4.23.6/dist/antd.css" />
+ -->
+ <link rel="stylesheet" href="./antd.css">
+ <script src='./echarts.min.js'></script>
+</head>
+<body>
+
+  <!-- 单页面应用程序的挂载节点 -->
+  <div id="app"></div>
+
+</body>
+</html>

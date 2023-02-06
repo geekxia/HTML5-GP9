@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link rel="stylesheet" href="./assets/style.css">
+</head>
+<body>
+
+  <div id="app">
+    <qf-dialog
+      :visible.sync='show' @close='show=false' @confirm='submit' title='修改用户名' :width='500' center :show-close='false'>
+      <!-- v-slot:default='scope'  简写成 #default='scope' -->
+      <!-- 这个scope代表的是由当前插槽回传回来的数据 -->
+      <template #default='{a,b}'>
+        <div>
+          你确定要删除当前用户吗？
+          <span v-text='a'></span>
+          <span v-text='b'></span>
+        </div>
+      </template>
+      <!-- 下面这种带有名字的插槽，叫做具名插槽 -->
+      <template #title='scope'>
+        <div>危险<span v-text='scope.c'></span></div>
+      </template>
+      <template #footer>
+        <span class='danger' @cliic>删除</span>
+      </template>
+    </qf-dialog>
+
+    <button @click='show=true'>打开对话框</button>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.7.10/dist/vue.js"></script>
+
+  <script>
+    // 1、如何封装可复用的UI组件？
+
+    // 思路：根据UI稿和PRD原型，对一组视图进行分析，找出它们之间的相似点和差异点；把相同点设计成HTML视图结构；使用自定义属性设计那些文本、样式等差异；使用自定义事件，设计那些有差异的功能（交互事件、功能事件）；使用自定义插槽设计那些可以由用户自定义的视图结构。
+
+    // 设计UI组件 = 自定义属性(v-bind) + 自定义事件(v-on) + 自定义插槽(<slot> v-slot)
+
+    // 2、理解插槽
+
+    // Vue内置了一个组件 <slot>组件。当我们在封装自定义组件时，如果一段视图结构无法确定，这时可以使用 <slot>占位，把这个视图位置交给用户决定。
+    // 什么是具名插槽？<slot>的默认名字叫default。当在自定义组件中需要用到多个不同的<slot>时，我们给它取个名字，即<slot name='icon'>。当用户使用这个自定义组件时，使用 v-slot:icon 来指定显示在哪些具名插槽中。
+
+    // 3、v-slot指令
+
+    // 当我们在使用自定义组件，使用v-slot可指定视图结构显示在哪个具名插槽中。像这样 <template #slot='icon'></template>
+    // 因为v-slot用得非常多，所以简写为   #具名插槽名='scope'
+
+    // 4、作业：大家在element-ui中，找5~10个组件，自已实现一遍。
+  </script>
+
+  <!-- 在Vue2中，组件视图要满足“单一根节点”原则 -->
+  <script type='x-template' id='dialog'>
+    <div class='layer' v-if='visible' @click='$emit("close")'>
+      <div
+        class='dialog'
+        @click.stop='$emit("")'
+        :style='{width:`${width}px`,marginLeft:`-${width/2}px`}'
+      >
+        <header>
+          <slot name='title' :c='3' d='4'>
+            <div v-text='title' :style='{textAlign:(center?"center":"left")}'></div>
+          </slot>
+          <div @click='$emit("close")' v-show='showClose'>X</div>
+        </header>
+        <main>
+          <!-- 有name属性的插槽叫做具名插槽，没有name属性的叫做默认插槽 -->
+          <!-- 被<slot>包裹的视图，是当前插槽的默认视图 -->
+          <!-- 在<slot>上可以自定义属性，在父组件组件中 #default='scope'可以接收这些数据 -->
+          <slot a='1' b='2'>
+            <div>这是主体区域</div>
+          </slot>
+        </main>
+        <footer :style='{justifyContent: (center?"center":"flex-end")}'>
+          <slot name='footer'>
+            <span @click='$emit("close")'>取消</span>
+            <span class='primary' @click='$emit("confirm")'>确定</span>
+          </slot>
+        </footer>
+      </div>
+    </div>
+  </script>
+
+  <script>
+    Vue.component('qf-dialog', {
+      template: '#dialog',
+      // 所有自定义属性都在这里接收，接收后可以使用this访问
+      props: {
+        visible: { type: Boolean, default: false },
+        title: { type: String, default: '标题' },
+        width: { type: Number, default: 520 },
+        center: { type: Boolean, default: false },
+        // 当自定义属性有多个单词时，在这里接收时用小驼峰命名法
+        showClose: { type: Boolean, default: true }
+      }
+    })
+
+    const app = new Vue({
+      el: '#app',
+      data: {
+        show: false
+      },
+      methods: {
+        submit () {
+          console.log('异步调接口')
+          this.show = false
+        }
+      }
+    })
+  </script>
+
+</body>
+</html>

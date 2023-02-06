@@ -1,0 +1,111 @@
+<!-- 演示小程序页面向H5传参 -->
+<view wx:for="{{goods}}" wx:key='item'>
+  <image src='{{item.src}}' data-search="{{item.search}}" bindtap="skipH5"></image>
+  <text>{{item.name}}</text>
+</view>
+
+<!-- 地图组件的基础使用 -->
+<map 
+  class="map" 
+  scale="18"
+  markers="{{shopInfo.markers}}"
+  longitude="{{shopInfo.longitude}}" 
+  latitude="{{shopInfo.latitude}}">
+</map>
+<button bindtap='navigate'>导航去这里</button>
+<button bindtap='call'>联系店铺</button>
+
+<!-- 关于图片使用的小技巧 -->
+<image src='{{img.a}}' />
+
+<!-- button组件的其它用法 -->
+<button open-type="contact">联系客服</button>
+<button open-type="feedback">反馈建议</button>
+<button open-type="chooseAvatar">更换头像</button>
+
+<!-- scroll-view组件的基本用法 -->
+<scroll-view 
+  class="navs" 
+  scroll-x 
+  scroll-into-view='{{"qf"+toId}}'
+  scroll-with-animation
+>
+  <view 
+    class="item {{onId==item.id ? 'on': ''}}" 
+    wx:for="{{navs}}" 
+    id='{{"qf"+item.id}}'
+    data-id='{{item.id}}'
+    bindtap="navChange"
+    wx:key='item'>{{item.label}}</view>
+</scroll-view>
+
+<!-- 用button实现转发 -->
+<button open-type="share">拼团</button>
+
+<!-- 打开内置授权页面的两种方式 -->
+<button open-type="openSetting">立即授权</button>
+<button bindtap="openAuth">立即授权</button>
+
+<!-- 获取用户手机号 -->
+<button open-type="getPhoneNumber" bindgetphonenumber="getMobile">登录</button>
+
+<!-- 获取用户信息的旧写法 -->
+<button open-type="getUserInfo" bindgetuserinfo="getInfo">登录</button>
+<!-- 获取用户信息的新写法 -->
+<button style="text-align: center;" bindtap="getInfo2">登录</button>
+
+<!-- 画布的最新用法 -->
+<canvas type="2d" id="canvas" class="canvas"></canvas>
+<button bindtap="save">保存到相册</button>
+
+<!-- 渲染文章列表 -->
+<view wx:for="{{articleList}}">
+  <view style="line-height: 100rpx;">{{item.title}}</view>
+</view>
+
+<!-- 使用自定义组件 -->
+<qf-cate list='{{cateList}}' value="{{cateIdx}}" bindchange='cateChange'></qf-cate>
+
+<!-- 文本渲染 -->
+<view>{{ msg + '!!'}}</view>
+
+<!-- 列表渲染 -->
+<view wx:for="{{list}}" wx:key="*this" wx:for-index='idx' wx:for-item='user'>
+  <text>{{idx}}</text> :  
+  <text>{{user.name}}</text> : 
+  <text>{{user.age}}</text>
+</view>
+
+<!-- 条件渲染 -->
+<view wx:if='{{idx===1}}'>千锋教育</view>
+<view wx:elif='{{idx===2}}'>深圳教育</view>
+<view wx:else>千锋教育</view>
+<button bindtap="toggle">切换</button>
+
+<!-- 使用 hidden 属性实现条件渲染 -->
+<view hidden="{{bol}}">我是人</view>
+
+<!-- 动态样式 -->
+<view style="color:red;font-size:{{size}}rpx;">动态样式</view>
+<view class="box {{cc}}">动态样式</view>
+
+<!-- 事件绑定 -->
+<!-- 使用dataset实现事件传参 -->
+<button catchtap="handler1" data-qf='a'>触屏（不支持冒泡）</button>
+<button bindtap="handler1" data-qf='b'>触屏（支持冒泡）</button>
+
+<!-- 表单绑定（手动取值） -->
+<input type="text" placeholder="请输入用户名" value="{{name}}" bindinput="getName"/>
+<!-- 表单双向绑定（自动取值） -->
+<input type="text" placeholder="请输入别名" model:value="{{nick}}" />
+
+<!-- 类DOM操作 -->
+<view id='box'>测试类DOM操作</view>
+<button bindtap="handler2">操作</button>
+
+<!-- 动画 -->
+<view id='foo'></view>
+<button bindtap="start">开始表演</button>
+
+<!-- 回到顶部 -->
+<button bindtap="backUp">回到顶部</button>
